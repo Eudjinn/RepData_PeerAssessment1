@@ -4,6 +4,8 @@
 ## Loading and preprocessing the data
 
 ```r
+library(ggplot2)
+
 activity <- read.csv(unz("activity.zip", "activity.csv"))
 activity <- transform(activity, date = as.Date(date, "%Y-%m-%d"))
 activity.woNA <- activity[!is.na(activity$steps), ]
@@ -19,7 +21,6 @@ median.ts <- median(total.steps)
 
 ts.range = max(total.steps) - min(total.steps)
 
-library(ggplot2)
 ggplot(data = total.steps.df, aes(total.steps)) + 
     geom_histogram(binwidth = ts.range/10, col = "blue", aes(fill=..count..)) + 
     geom_vline(aes(xintercept = median.ts), color = "green", size = 1)
@@ -27,25 +28,31 @@ ggplot(data = total.steps.df, aes(total.steps)) +
 
 ![](PA1_template_files/figure-html/totals-1.png) 
 
-```r
-print(paste("Mean of the total steps: ", mean.ts))
-```
-
-```
-## [1] "Mean of the total steps:  10766.1886792453"
-```
-
-```r
-print(paste("Median of the total steps: ", median.ts))
-```
-
-```
-## [1] "Median of the total steps:  10765"
-```
+Mean of the total steps: 1.0766189\times 10^{4}  
+Median of the total steps: 10765    
 
 ## What is the average daily activity pattern?
 
+```r
+avg.steps <- tapply(activity.woNA$steps, activity.woNA$interval, mean)
+avg.steps.df <- data.frame(interval = as.numeric(names(avg.steps)), 
+                           average.steps = as.vector(avg.steps))
+max.avg.steps.index <- which.max(avg.steps.df$average.steps)
+max.avg.steps.interval <- avg.steps.df[max.avg.steps.index, "interval"]
+max.avg.steps.value <- avg.steps.df[max.avg.steps.index, "average.steps"]
 
+ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
+    geom_line(aes(color = average.steps)) + 
+    geom_point(data = NULL, 
+               aes(max.avg.steps.interval, max.avg.steps.value), 
+               color = "red", 
+               size = 2)
+```
+
+![](PA1_template_files/figure-html/averages-1.png) 
+
+Interval with the maximum number of steps on average across all days: 835  
+The value in that interval: 206.1698113  
 
 ## Imputing missing values
 
