@@ -70,7 +70,8 @@ img {
 
 activity &lt;- read.csv(unz(&quot;activity.zip&quot;, &quot;activity.csv&quot;))
 activity &lt;- transform(activity, date = as.Date(date, &quot;%Y-%m-%d&quot;))
-activity.woNA &lt;- activity[!is.na(activity$steps), ]</code></pre>
+activity.woNA &lt;- activity[!is.na(activity$steps), ]
+rownames(activity.woNA) &lt;- NULL</code></pre>
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
@@ -107,6 +108,20 @@ ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<pre class="r"><code>total.NA = sum(is.na(activity$steps))</code></pre>
+<p>Total number of rows with NA values: 2304</p>
+<pre class="r"><code># Imputing missing values using mean for that 5-minute interval.
+activity.NA &lt;- activity[is.na(activity$steps), ]
+activity.imp &lt;- activity.imp &lt;- merge(activity.NA, avg.steps.df, by = &quot;interval&quot;)
+activity.imp &lt;- activity.imp[order(activity.imp$date), ]
+rownames(activity.imp) &lt;- NULL
+activity.imp &lt;- data.frame(steps = activity.imp$average.steps, 
+                           date = activity.imp$date, 
+                           interval = activity.imp$interval)
+# Create a new dataset that is equal to the original dataset but with the missing data filled in
+activity.new &lt;- rbind(activity.woNA, activity.imp)
+activity.new &lt;- activity.new[order(activity.new$date, activity.new$interval), ]
+rownames(activity.new) &lt;- NULL</code></pre>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>

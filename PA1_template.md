@@ -9,6 +9,7 @@ library(ggplot2)
 activity <- read.csv(unz("activity.zip", "activity.csv"))
 activity <- transform(activity, date = as.Date(date, "%Y-%m-%d"))
 activity.woNA <- activity[!is.na(activity$steps), ]
+rownames(activity.woNA) <- NULL
 ```
 
 ## What is mean total number of steps taken per day?
@@ -56,6 +57,26 @@ The value in that interval: 206.1698113
 
 ## Imputing missing values
 
+```r
+total.NA = sum(is.na(activity$steps))
+```
 
+Total number of rows with NA values: 2304
+
+
+```r
+# Imputing missing values using mean for that 5-minute interval.
+activity.NA <- activity[is.na(activity$steps), ]
+activity.imp <- activity.imp <- merge(activity.NA, avg.steps.df, by = "interval")
+activity.imp <- activity.imp[order(activity.imp$date), ]
+rownames(activity.imp) <- NULL
+activity.imp <- data.frame(steps = activity.imp$average.steps, 
+                           date = activity.imp$date, 
+                           interval = activity.imp$interval)
+# Create a new dataset that is equal to the original dataset but with the missing data filled in
+activity.new <- rbind(activity.woNA, activity.imp)
+activity.new <- activity.new[order(activity.new$date, activity.new$interval), ]
+rownames(activity.new) <- NULL
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
