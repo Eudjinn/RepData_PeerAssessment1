@@ -45,8 +45,8 @@ mean.ts <- mean(total.steps)
 median.ts <- median(total.steps)
 ```
 
-**Mean** of the total steps per day: `r mean.ts`  
-**Median** of the total steps per day: `r median.ts`    
+**Mean** of the total steps per day: **`r mean.ts`**  
+**Median** of the total steps per day: **`r median.ts`**    
 
 ```{r totals_hist}
 # calculate the range to set the binwidth of histogram 
@@ -73,8 +73,8 @@ max.avg.steps.interval <- avg.steps.df[max.avg.steps.index, "interval"]
 max.avg.steps.value <- avg.steps.df[max.avg.steps.index, "average.steps"]
 ```
 
-Interval with the maximum number of steps on average across all days: `r max.avg.steps.interval`  
-Maximum number of steps on average in that interval: `r max.avg.steps.value`  
+Interval with the maximum number of steps on average across all days: **`r max.avg.steps.interval`**  
+Maximum number of steps on average in that interval: **`r max.avg.steps.value`**  
 
 Below is a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). Maximum is shown as a red dot.
 
@@ -136,10 +136,10 @@ mean.ts.full <- mean(total.steps.full)
 median.ts.full <- median(total.steps.full)
 ```
 
-**Mean** of the total steps on a dataset with imputed values: `r mean.ts.full`  
-**Median** of the total steps on a dataset with imputed values: `r median.ts.full`    
+**Mean** of the total steps on a dataset with imputed values: **`r mean.ts.full`**  
+**Median** of the total steps on a dataset with imputed values: **`r median.ts.full`**    
 
-Below is a histogram histogram of the total number of steps taken each day. 
+Below is a histogram of the total number of steps taken each day. 
 
 ```{r imputed_hist}
 ggplot(data = total.steps.full.df, aes(total.steps.full)) + 

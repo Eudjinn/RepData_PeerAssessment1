@@ -103,7 +103,7 @@ total.steps &lt;- as.vector(tapply(activity.woNA$steps, activity.woNA$date, sum)
 total.steps.df &lt;- data.frame(total.steps)
 mean.ts &lt;- mean(total.steps)
 median.ts &lt;- median(total.steps)</code></pre>
-<p><strong>Mean</strong> of the total steps per day: 1.076618910^{4}<br /><strong>Median</strong> of the total steps per day: 10765</p>
+<p><strong>Mean</strong> of the total steps per day: <strong>1.076618910^{4}</strong><br /><strong>Median</strong> of the total steps per day: <strong>10765</strong></p>
 <pre class="r"><code># calculate the range to set the binwidth of histogram 
 ts.range = max(total.steps) - min(total.steps)
 
@@ -126,7 +126,7 @@ avg.steps.df &lt;- data.frame(interval = as.numeric(names(avg.steps)),
 max.avg.steps.index &lt;- which.max(avg.steps.df$average.steps)
 max.avg.steps.interval &lt;- avg.steps.df[max.avg.steps.index, &quot;interval&quot;]
 max.avg.steps.value &lt;- avg.steps.df[max.avg.steps.index, &quot;average.steps&quot;]</code></pre>
-<p>Interval with the maximum number of steps on average across all days: 835<br />Maximum number of steps on average in that interval: 206.1698113</p>
+<p>Interval with the maximum number of steps on average across all days: <strong>835</strong><br />Maximum number of steps on average in that interval: <strong>206.1698113</strong></p>
 <p>Below is a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). Maximum is shown as a red dot.</p>
 <pre class="r"><code>ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
     geom_line(aes(color = average.steps)) + 
@@ -176,8 +176,8 @@ total.steps.full &lt;- as.vector(tapply(activity.new$steps, activity.new$date, s
 total.steps.full.df &lt;- data.frame(total.steps.full)
 mean.ts.full &lt;- mean(total.steps.full)
 median.ts.full &lt;- median(total.steps.full)</code></pre>
-<p><strong>Mean</strong> of the total steps on a dataset with imputed values: 1.076618910^{4}<br /><strong>Median</strong> of the total steps on a dataset with imputed values: 1.076618910^{4}</p>
-<p>Below is a histogram histogram of the total number of steps taken each day.</p>
+<p><strong>Mean</strong> of the total steps on a dataset with imputed values: <strong>1.076618910^{4}</strong><br /><strong>Median</strong> of the total steps on a dataset with imputed values: <strong>1.076618910^{4}</strong></p>
+<p>Below is a histogram of the total number of steps taken each day.</p>
 <pre class="r"><code>ggplot(data = total.steps.full.df, aes(total.steps.full)) + 
     geom_histogram(binwidth = ts.range/10, col = &quot;blue&quot;, aes(fill=..count..)) + 
     # median will be shown as a vertical green line on the histogram.

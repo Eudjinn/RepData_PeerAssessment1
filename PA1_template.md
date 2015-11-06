@@ -60,8 +60,8 @@ mean.ts <- mean(total.steps)
 median.ts <- median(total.steps)
 ```
 
-**Mean** of the total steps per day: 1.0766189\times 10^{4}  
-**Median** of the total steps per day: 10765    
+**Mean** of the total steps per day: **1.0766189\times 10^{4}**  
+**Median** of the total steps per day: **10765**    
 
 
 ```r
@@ -92,8 +92,8 @@ max.avg.steps.interval <- avg.steps.df[max.avg.steps.index, "interval"]
 max.avg.steps.value <- avg.steps.df[max.avg.steps.index, "average.steps"]
 ```
 
-Interval with the maximum number of steps on average across all days: 835  
-Maximum number of steps on average in that interval: 206.1698113  
+Interval with the maximum number of steps on average across all days: **835**  
+Maximum number of steps on average in that interval: **206.1698113**  
 
 Below is a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). Maximum is shown as a red dot.
 
@@ -160,10 +160,10 @@ mean.ts.full <- mean(total.steps.full)
 median.ts.full <- median(total.steps.full)
 ```
 
-**Mean** of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}  
-**Median** of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}    
+**Mean** of the total steps on a dataset with imputed values: **1.0766189\times 10^{4}**  
+**Median** of the total steps on a dataset with imputed values: **1.0766189\times 10^{4}**    
 
-Below is a histogram histogram of the total number of steps taken each day. 
+Below is a histogram of the total number of steps taken each day. 
 
 
 ```r
