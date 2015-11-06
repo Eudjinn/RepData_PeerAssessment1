@@ -3,10 +3,10 @@
 
 
 ## Loading and preprocessing the data
+Unzip the file and read the data using read.csv, convert date from string to the Date format.
+
 
 ```r
-library(ggplot2)
-
 activity <- read.csv(unz("activity.zip", "activity.csv"))
 activity <- transform(activity, date = as.Date(date, "%Y-%m-%d"))
 
@@ -15,6 +15,38 @@ activity.woNA <- activity[!is.na(activity$steps), ]
 
 # reset row index to make it sequential again
 rownames(activity.woNA) <- NULL
+```
+
+Here are the first few rows of the original data:
+
+```r
+head(activity)
+```
+
+```
+##   steps       date interval
+## 1    NA 2012-10-01        0
+## 2    NA 2012-10-01        5
+## 3    NA 2012-10-01       10
+## 4    NA 2012-10-01       15
+## 5    NA 2012-10-01       20
+## 6    NA 2012-10-01       25
+```
+Here are a few rows with non-NA values:
+
+```r
+activity[1300:1306, ]
+```
+
+```
+##      steps       date interval
+## 1300   345 2012-10-05     1215
+## 1301   345 2012-10-05     1220
+## 1302    10 2012-10-05     1225
+## 1303   485 2012-10-05     1230
+## 1304   515 2012-10-05     1235
+## 1305   168 2012-10-05     1240
+## 1306     0 2012-10-05     1245
 ```
 
 ## What is mean total number of steps taken per day?
@@ -26,7 +58,13 @@ total.steps <- as.vector(tapply(activity.woNA$steps, activity.woNA$date, sum))
 total.steps.df <- data.frame(total.steps)
 mean.ts <- mean(total.steps)
 median.ts <- median(total.steps)
+```
 
+**Mean** of the total steps per day: 1.0766189\times 10^{4}  
+**Median** of the total steps per day: 10765    
+
+
+```r
 # calculate the range to set the binwidth of histogram 
 ts.range = max(total.steps) - min(total.steps)
 
@@ -36,10 +74,7 @@ ggplot(data = total.steps.df, aes(total.steps)) +
     geom_vline(aes(xintercept = median.ts), color = "green", size = 1)
 ```
 
-![](PA1_template_files/figure-html/totals-1.png) 
-
-Mean of the total steps: 1.0766189\times 10^{4}  
-Median of the total steps: 10765    
+![](PA1_template_files/figure-html/totals_hist-1.png) 
 
 ## What is the average daily activity pattern?
 
@@ -55,10 +90,15 @@ avg.steps.df <- data.frame(interval = as.numeric(names(avg.steps)),
 max.avg.steps.index <- which.max(avg.steps.df$average.steps)
 max.avg.steps.interval <- avg.steps.df[max.avg.steps.index, "interval"]
 max.avg.steps.value <- avg.steps.df[max.avg.steps.index, "average.steps"]
+```
 
-# A time series plot of the 5-minute interval (x-axis) and the average number 
-# of steps taken, averaged across all days (y-axis). 
-# Maximum is shown as a red dot.
+Interval with the maximum number of steps on average across all days: 835  
+Maximum number of steps on average in that interval: 206.1698113  
+
+Below is a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). Maximum is shown as a red dot.
+
+
+```r
 ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
     geom_line(aes(color = average.steps)) + 
     geom_point(data = NULL, 
@@ -67,10 +107,7 @@ ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
                size = 2)
 ```
 
-![](PA1_template_files/figure-html/averages-1.png) 
-
-Interval with the maximum number of steps on average across all days: 835  
-The value in that interval: 206.1698113  
+![](PA1_template_files/figure-html/averages_plot-1.png) 
 
 ## Imputing missing values
 
@@ -80,6 +117,10 @@ total.NA = sum(is.na(activity$steps))
 ```
 
 Total number of rows with NA values: 2304
+
+Imputing missing values will be done using mean steps per interval which were calculated earlier and stored in avg.steps.df.  
+We take a subset of the original data where steps are NA and merge by interval with the dataframe containing mean steps per interval.  
+Using the result of merging we create new dataframe with the same format as the original dataframe and add it to non-NA data from the original dataset. The result is a dataframe we wanted to make for further analysis.
 
 
 ```r
@@ -117,12 +158,15 @@ total.steps.full <- as.vector(tapply(activity.new$steps, activity.new$date, sum)
 total.steps.full.df <- data.frame(total.steps.full)
 mean.ts.full <- mean(total.steps.full)
 median.ts.full <- median(total.steps.full)
+```
 
-# Make a histogram of the total number of steps taken each day and Calculate 
-# and report the mean and median total number of steps taken per day. Do these 
-# values differ from the estimates from the first part of the assignment? 
-# What is the impact of imputing missing data on the estimates of the total daily 
-# number of steps?
+**Mean** of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}  
+**Median** of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}    
+
+Below is a histogram histogram of the total number of steps taken each day. 
+
+
+```r
 ggplot(data = total.steps.full.df, aes(total.steps.full)) + 
     geom_histogram(binwidth = ts.range/10, col = "blue", aes(fill=..count..)) + 
     # median will be shown as a vertical green line on the histogram.
@@ -131,12 +175,9 @@ ggplot(data = total.steps.full.df, aes(total.steps.full)) +
     geom_vline(aes(xintercept = median.ts), color = "black", size = 1)
 ```
 
-![](PA1_template_files/figure-html/imputing-1.png) 
+![](PA1_template_files/figure-html/imputed_hist-1.png) 
 
-Mean of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}  
-Median of the total steps on a dataset with imputed values: 1.0766189\times 10^{4}    
-
-These mean and median values for the dataset with imputed values are almost the same as for the dataset with NA values dropped but the shape of the histogram in the center looks different.
+These **mean** and **median** values for the dataset with imputed values are almost the same as for the dataset with NA values dropped but the shape of the histogram in the center looks different.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -171,10 +212,12 @@ activity.avg.we <-
 # all this transformation could be done with melt from reshape package but
 # I wanted to use base R functionality in this assignment
 activity.avg.day <- rbind(activity.avg.wd, activity.avg.we)
+```
 
-# Make a panel plot containing a time series plot of the 5-minute interval 
-# (x-axis) and the average number of steps taken, averaged across all weekday 
-# days or weekend days (y-axis).
+Below is a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+
+```r
 qplot(interval, 
       steps, 
       data = activity.avg.day, 
@@ -183,5 +226,5 @@ qplot(interval,
       facets = day ~ .)
 ```
 
-![](PA1_template_files/figure-html/patterns-1.png) 
+![](PA1_template_files/figure-html/day_plot-1.png) 
 
