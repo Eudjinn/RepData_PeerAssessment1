@@ -137,3 +137,46 @@ Median of the total steps on a dataset with imputed values: `r median.ts.full`
 These mean and median values for the dataset with imputed values are almost the same as for the dataset with NA values dropped but the shape of the histogram in the center looks different.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r patterns}
+# Create a new factor variable in the dataset with two levels - "weekday" and 
+# "weekend" indicating whether a given date is a weekday or weekend day
+activity.new$day <- ifelse(weekdays(activity.new$date) == "Sunday" | 
+                               weekdays(activity.new$date) == "Saturday",
+                           "weekend",
+                           "weekday")
+
+# calculate average of steps per weekday per interval, as a result we get
+# matrix with intervals as column names, weekday/weekend as rownames and
+# corresponding averages as the values in the cells of the matrix
+activity.new.day.avg <- tapply(activity.new$steps, 
+                               list(activity.new$day, activity.new$interval),
+                               mean)
+
+# make a dataframe with weekday values
+activity.avg.wd <- 
+    data.frame(interval = as.integer(colnames(activity.new.day.avg)), 
+               steps = as.vector(activity.new.day.avg["weekday", ]),
+               day = "weekday")
+
+# make a dataframe with weekend values
+activity.avg.we <- 
+    data.frame(interval = as.integer(colnames(activity.new.day.avg)), 
+               steps = as.vector(activity.new.day.avg["weekend", ]),
+               day = "weekend")
+
+# combine two dataframes in order to use in in qplot with facets.
+# all this transformation could be done with melt from reshape package but
+# I wanted to use base R functionality in this assignment
+activity.avg.day <- rbind(activity.avg.wd, activity.avg.we)
+
+# Make a panel plot containing a time series plot of the 5-minute interval 
+# (x-axis) and the average number of steps taken, averaged across all weekday 
+# days or weekend days (y-axis).
+qplot(interval, 
+      steps, 
+      data = activity.avg.day, 
+      geom = "line", 
+      color = steps, 
+      facets = day ~ .)
+```
+
