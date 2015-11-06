@@ -172,8 +172,15 @@ activity.avg.we <-
 # I wanted to use base R functionality in this assignment
 activity.avg.day <- rbind(activity.avg.wd, activity.avg.we)
 
-# show patterns for weekdays and weekends on two facets
-qplot(interval, steps, data = activity.avg.day, geom = "line", color = steps, facets = day ~ .)
+# Make a panel plot containing a time series plot of the 5-minute interval 
+# (x-axis) and the average number of steps taken, averaged across all weekday 
+# days or weekend days (y-axis).
+qplot(interval, 
+      steps, 
+      data = activity.avg.day, 
+      geom = "line", 
+      color = steps, 
+      facets = day ~ .)
 ```
 
 ![](PA1_template_files/figure-html/patterns-1.png) 
