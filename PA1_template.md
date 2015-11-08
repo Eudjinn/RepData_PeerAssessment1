@@ -71,7 +71,10 @@ ts.range = max(total.steps) - min(total.steps)
 # median will be shown as a vertical green line on the histogram
 ggplot(data = total.steps.df, aes(total.steps)) + 
     geom_histogram(binwidth = ts.range/10, col = "blue", aes(fill=..count..)) + 
-    geom_vline(aes(xintercept = median.ts), color = "green", size = 1)
+    geom_vline(aes(xintercept = median.ts), color = "green", size = 1) +
+    labs(title = "Total number of steps per day - histogram", 
+         x = "Number of steps per day", 
+         y = "Number of days")
 ```
 
 ![](PA1_template_files/figure-html/totals_hist-1.png) 
@@ -104,7 +107,10 @@ ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
     geom_point(data = NULL, 
                aes(max.avg.steps.interval, max.avg.steps.value), 
                color = "red", 
-               size = 2)
+               size = 2) +
+    labs(title = "Average number of steps per 5-minute interval across all days", 
+         x = "5-minute interval", 
+         y = "Average number of steps")
 ```
 
 ![](PA1_template_files/figure-html/averages_plot-1.png) 
@@ -172,7 +178,10 @@ ggplot(data = total.steps.full.df, aes(total.steps.full)) +
     # median will be shown as a vertical green line on the histogram.
     geom_vline(aes(xintercept = median.ts.full), color = "green", size = 1) +
     # show old value of median with black vertical line
-    geom_vline(aes(xintercept = median.ts), color = "black", size = 1)
+    geom_vline(aes(xintercept = median.ts), color = "black", size = 1) +
+    labs(title = "Total number of steps per day - histogram", 
+         x = "Number of steps per day", 
+         y = "Number of days")
 ```
 
 ![](PA1_template_files/figure-html/imputed_hist-1.png) 
@@ -223,7 +232,10 @@ qplot(interval,
       data = activity.avg.day, 
       geom = "line", 
       color = steps, 
-      facets = day ~ .)
+      facets = day~.,
+      main = "Average number of steps per 5-minute interval per day type",
+      xlab = "5-munute interval",
+      ylab = "Average number of steps")
 ```
 
 ![](PA1_template_files/figure-html/day_plot-1.png) 
