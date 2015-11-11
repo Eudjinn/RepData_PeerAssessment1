@@ -1,4 +1,5 @@
 # Reproducible Research: Peer Assessment 1
+Evgeniy Zabrodskiy  
 
 
 
@@ -56,12 +57,12 @@ activity[1300:1306, ]
 # dimnames, we need to make a dataframe as it is a better format for plotting
 total.steps <- as.vector(tapply(activity.woNA$steps, activity.woNA$date, sum))
 total.steps.df <- data.frame(total.steps)
-mean.ts <- mean(total.steps)
-median.ts <- median(total.steps)
+mean.ts <- as.integer(mean(total.steps))
+median.ts <- as.integer(median(total.steps))
 ```
 
-**Mean** of the total steps per day: **1.0766189\times 10^{4}**  
-**Median** of the total steps per day: **10765**    
+Rounded **mean** of the total steps per day: **10766**  
+Rounded **median** of the total steps per day: **10765**    
 
 
 ```r
@@ -92,11 +93,11 @@ avg.steps.df <- data.frame(interval = as.numeric(names(avg.steps)),
 # across all the days in the dataset, contains the maximum number of steps?
 max.avg.steps.index <- which.max(avg.steps.df$average.steps)
 max.avg.steps.interval <- avg.steps.df[max.avg.steps.index, "interval"]
-max.avg.steps.value <- avg.steps.df[max.avg.steps.index, "average.steps"]
+max.avg.steps.value <- as.integer(avg.steps.df[max.avg.steps.index, "average.steps"])
 ```
 
 Interval with the maximum number of steps on average across all days: **835**  
-Maximum number of steps on average in that interval: **206.1698113**  
+Rounded maximum number of steps on average in that interval: **206**  
 
 Below is a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis). Maximum is shown as a red dot.
 
@@ -122,7 +123,7 @@ ggplot(data = avg.steps.df, aes(interval, average.steps, group = 1)) +
 total.NA = sum(is.na(activity$steps))
 ```
 
-Total number of rows with NA values: 2304
+Total number of rows with NA values: **2304**
 
 Imputing missing values will be done using mean steps per interval which were calculated earlier and stored in avg.steps.df.  
 We take a subset of the original data where steps are NA and merge by interval with the dataframe containing mean steps per interval.  
@@ -162,12 +163,12 @@ rownames(activity.new) <- NULL
 # calculate total steps per date for the full dataset with imputed values. 
 total.steps.full <- as.vector(tapply(activity.new$steps, activity.new$date, sum))
 total.steps.full.df <- data.frame(total.steps.full)
-mean.ts.full <- mean(total.steps.full)
-median.ts.full <- median(total.steps.full)
+mean.ts.full <- as.integer(mean(total.steps.full))
+median.ts.full <- as.integer(median(total.steps.full))
 ```
 
-**Mean** of the total steps on a dataset with imputed values: **1.0766189\times 10^{4}**  
-**Median** of the total steps on a dataset with imputed values: **1.0766189\times 10^{4}**    
+Rounded **mean** of the total steps on a dataset with imputed values: **10766**  
+Rounded **median** of the total steps on a dataset with imputed values: **10766**    
 
 Below is a histogram of the total number of steps taken each day. 
 
@@ -177,8 +178,6 @@ ggplot(data = total.steps.full.df, aes(total.steps.full)) +
     geom_histogram(binwidth = ts.range/10, col = "blue", aes(fill=..count..)) + 
     # median will be shown as a vertical green line on the histogram.
     geom_vline(aes(xintercept = median.ts.full), color = "green", size = 1) +
-    # show old value of median with black vertical line
-    geom_vline(aes(xintercept = median.ts), color = "black", size = 1) +
     labs(title = "Total number of steps per day - histogram", 
          x = "Number of steps per day", 
          y = "Number of days")
@@ -217,8 +216,8 @@ activity.avg.we <-
                steps = as.vector(activity.new.day.avg["weekend", ]),
                day = "weekend")
 
-# combine two dataframes in order to use in in qplot with facets.
-# all this transformation could be done with melt from reshape package but
+# combine two dataframes in order to use it in qplot with facets.
+# all this transformation could be done using melt from reshape package but
 # I wanted to use base R functionality in this assignment
 activity.avg.day <- rbind(activity.avg.wd, activity.avg.we)
 ```
